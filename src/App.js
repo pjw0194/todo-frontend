@@ -81,7 +81,9 @@ function App() {
 					/>
 				</Col>
 				<Col xs={12} sm={2}>
-					<button className="button-add">추가</button>
+					<button className="button-add" onClick={addTask}>
+						추가
+					</button>
 				</Col>
 			</Row>
 
