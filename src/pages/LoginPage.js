@@ -5,11 +5,10 @@ import api from "../utils/api";
 
 import { Link, useNavigate } from "react-router-dom";
 
-const LoginPage = () => {
+const LoginPage = ({ user, setUser, getUser }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
-	const [user, setUser] = useState(null);
 	const navigate = useNavigate();
 
 	const handleLogin = async (event) => {
@@ -21,13 +20,19 @@ const LoginPage = () => {
 				sessionStorage.setItem("token", response.data.token);
 				api.defaults.headers["authorization"] = "Bearer " + response.data.token;
 				setError("");
+				await getUser();
 				navigate("/");
+			} else {
+				throw new Error(response.message);
 			}
-			throw new Error(response.message);
 		} catch (err) {
 			setError(err.message);
 		}
 	};
+
+	if (user) {
+		return navigate("/");
+	}
 
 	return (
 		<div className="display-center">

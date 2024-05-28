@@ -17,6 +17,8 @@ const TodoItem = ({ item, onDelete, onUpdate }) => {
 				<div className={itemClass}>
 					<div className="todo-content">{item.task}</div>
 
+					<div>by {item.author.name}</div>
+
 					<div>
 						<button className="button-delete" onClick={handleDelet}>
 							삭제

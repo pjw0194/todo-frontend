@@ -5,13 +5,16 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import { useEffect, useState } from "react";
 import api from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
-function TodoPage() {
+function TodoPage({ setUser }) {
 	const [todos, setTodos] = useState([]);
 	const [todoVal, setTodoVal] = useState("");
+	const navigate = useNavigate();
 
 	const getTasks = async () => {
 		const response = await api.get("/tasks");
+		console.log("task list", response.data.data);
 		setTodos(response.data.data);
 	};
 
@@ -60,6 +63,12 @@ function TodoPage() {
 		}
 	};
 
+	const handleLogout = () => {
+		sessionStorage.removeItem("token");
+		setUser(null);
+		navigate("/login");
+	};
+
 	useEffect(() => {
 		getTasks();
 	}, []);
@@ -67,7 +76,12 @@ function TodoPage() {
 	return (
 		<Container>
 			<Row className="add-item-row">
-				<Col xs={12} sm={10}>
+				<Col xs={12} sm={2}>
+					<button onClick={handleLogout} className="logout-button">
+						로그아웃
+					</button>
+				</Col>
+				<Col xs={12} sm={8}>
 					<input
 						type="text"
 						placeholder="할일을 입력하세요"
@@ -83,7 +97,6 @@ function TodoPage() {
 					</button>
 				</Col>
 			</Row>
-
 			<TodoBoard todos={todos} onDelete={deleteTask} onUpdate={updateTask} />
 		</Container>
 	);
